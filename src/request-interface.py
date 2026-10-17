@@ -1,16 +1,25 @@
+
 #!/usr/bin/env python3
-"""BlackTrace BT-204 request-interface prototype."""
+"""BlackTrace local-only request interface; no privileged actions."""
+
+import json
+import os
+import tempfile
+from pathlib import Path
 
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 2048
 
-MAX_CONTENT_LENGTH = 2048
-app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
+OUTBOX = Path(__file__).resolve().parents[1] / "test-outbox"
+ALLOWED_ACTIONS = {"review", "status-check"}
+
 
 @app.get("/health")
 def health():
     return jsonify(service="blacktrace-request-interface", status="ok")
+
 
 @app.post("/submit")
 def submit():
@@ -21,24 +30,33 @@ def submit():
     if not isinstance(data, dict):
         return jsonify(error="A JSON object is required"), 400
 
-    ticket = data.get("ticket")
-    action = data.get("action")
-
-    if ticket != "BT-204":
+    if data.get("ticket") != "BT-204":
         return jsonify(error="Unknown maintenance ticket"), 400
 
-    if not isinstance(action, str) or action not in {
-        "review",
-        "status-check",
-    }:
+    action = data.get("action")
+    if not isinstance(action, str) or action not in ALLOWED_ACTIONS:
         return jsonify(error="Unsupported action"), 400
 
-    # Prototype only: do not write to the privileged inbox or run commands.
-    app.logger.info("Accepted prototype request for ticket %s", ticket)
+    OUTBOX.mkdir(mode=0o700, parents=True, exist_ok=True)
+    OUTBOX.chmod(0o700)
+
+    payload = {"ticket": "BT-204", "action": action}
+    fd, temporary = tempfile.mkstemp(prefix=".request-", dir=OUTBOX)
+
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle)
+            handle.write("\n")
+        os.chmod(temporary, 0o600)
+        os.replace(temporary, OUTBOX / "request.json")
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
     return jsonify(
         status="accepted",
-        ticket=ticket,
-        message="Prototype request validated; no workflow was triggered.",
+        ticket="BT-204",
+        message="Saved to the local test outbox; no privileged workflow was triggered.",
     ), 202
 
 
