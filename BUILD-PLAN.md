@@ -27,3 +27,13 @@
 - Do not rely on the administrator account as the player.
 - Do not introduce world-writable inboxes or unexplained root cron jobs.
 - Test setup, reset, and health checks on Ubuntu 24.04.
+
+## Deployment safeguards
+- Preserve the existing blacktrace-diagnostics.service.
+- Keep blacktrace-review.service inactive until its processor is safely implemented and tested.
+- Keep /var/lib/blacktrace/inbox restricted to bt-operator.
+- Do not grant bt-player sudo privileges.
+- Keep /root/blacktrace-proof.txt root-owned with mode 600.
+- Do not modify the separate Wazuh VM.
+- Test setup, health-check, and reset on a disposable snapshot.
+- Do not claim the challenge is complete until a clean-baseline end-to-end test passes.
