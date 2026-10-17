@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 
-echo "== BlackTrace setup preflight =="
+echo "== BlackTrace local prototype setup =="
 
 command -v python3 >/dev/null || {
     echo "FAIL: python3 is missing"
@@ -20,25 +20,28 @@ python3 -c 'import flask' || {
 for file in \
     src/request-interface.py \
     src/workflow-prototype.py \
+    src/safe-review-processor.py \
     REQUEST-WORKFLOW.md \
-    WORKFLOW-TEST-PLAN.md
+    WORKFLOW-TEST-PLAN.md \
+    health-check.sh \
+    reset.sh
 do
-    test -f "$file" || {
+    if [[ ! -f "$file" ]]; then
         echo "FAIL: missing $file"
         exit 1
-    }
+    fi
 done
 
-id bt-player >/dev/null 2>&1 || {
-    echo "FAIL: bt-player account is missing"
-    exit 1
-}
+python3 -m py_compile \
+    src/request-interface.py \
+    src/workflow-prototype.py \
+    src/safe-review-processor.py
 
-if sudo -n -l -U bt-player 2>&1 | grep -qi "not allowed"; then
-    echo "PASS: bt-player is not allowed to use sudo"
-else
-    echo "WARNING: review bt-player sudo permissions manually"
-fi
+mkdir -p test-outbox
+chmod 700 test-outbox
 
-echo "PASS: required files and Python dependencies found"
-echo "Preflight complete. No services or system files were changed."
+echo "PASS: Python and Flask available"
+echo "PASS: all required prototype files exist"
+echo "PASS: Python syntax checks passed"
+echo "PASS: local test outbox is ready"
+echo "NOTE: this script does not deploy or activate the live CTF."
