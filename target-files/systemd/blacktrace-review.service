@@ -1,0 +1,9 @@
+[Unit]
+Description=BlackTrace Maintenance Review CTF
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 /opt/blacktrace/challenge/bin/process-request.py

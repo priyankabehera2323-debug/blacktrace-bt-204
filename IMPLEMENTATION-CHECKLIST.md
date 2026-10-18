@@ -33,3 +33,13 @@
 - [ ] Do not modify the separate Wazuh VM.
 - [ ] Preserve the existing working installation until testing passes.
 - [ ] Do not expose the vulnerable service to the public internet.
+
+## 7. Finalization status — 2026-10-17
+- [x] Existing diagnostics service and BT-204 public records inspected.
+- [x] Unprivileged bt-player account exists.
+- [x] Root proof file exists and is intended to remain root-only.
+- [x] Local request prototype passes basic validation tests.
+- [ ] Connect a validated player request to a predictable review trigger.
+- [ ] Ensure privileged processing never invokes a shell with untrusted input.
+- [ ] Implement full target setup, health-check, and reset procedures.
+- [ ] Validate the complete challenge from a clean snapshot.

@@ -1,0 +1,11 @@
+Project BlackTrace — Deployment Checklist
+Reference: BT-204
+
+1. Verify the diagnostics service health endpoint.
+2. Review the maintenance handover record.
+3. Confirm which account runs the maintenance workflow.
+4. Inspect the workflow's configuration and file permissions.
+5. Record the result before approving deployment.
+
+Reminder: The service account and the deployment operator are
+not necessarily the same identity.

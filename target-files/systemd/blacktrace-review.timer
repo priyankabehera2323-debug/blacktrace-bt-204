@@ -1,0 +1,11 @@
+[Unit]
+Description=BlackTrace scheduled maintenance review
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+AccuracySec=10s
+Unit=blacktrace-review.service
+
+[Install]
+WantedBy=timers.target

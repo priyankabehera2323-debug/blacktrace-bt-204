@@ -1,0 +1,12 @@
+Project BlackTrace — Maintenance Handover
+Ticket: BT-204
+Status: Pending review
+
+The diagnostics service was moved during the last maintenance window.
+The review workflow uses a separate request interface on port 8081.
+
+The maintenance team assigned workflow reference:
+PROFILE: NIGHTJAR-17
+
+Use the deployment checklist to determine which workflow configuration
+and permissions require further investigation.

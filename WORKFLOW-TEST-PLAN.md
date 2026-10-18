@@ -46,3 +46,17 @@ Keep the separate Wazuh VM unchanged.
 - Record a complete walkthrough only after end-to-end validation.
 
 The local prototype results do not establish that the live target workflow is complete.
+
+## Final integration plan — 2026-10-17
+
+1. Keep the diagnostics service and public BT-204 records unchanged.
+2. Keep the request interface bound to localhost during development.
+3. Validate request fields before writing any request to the inbox.
+4. Use a dedicated, least-privilege handoff mechanism for review requests.
+5. Ensure the privileged reviewer uses argument arrays or direct file APIs,
+   never a shell command built from untrusted request data.
+6. Add setup, health-check, and reset support for the complete target.
+7. Test a clean baseline, a valid request, rejected invalid requests, and reset.
+8. Verify the root-only objective remains unreadable to bt-player until the
+   documented challenge objective is reached.
+9. Do not claim end-to-end completion until every intended stage is verified.

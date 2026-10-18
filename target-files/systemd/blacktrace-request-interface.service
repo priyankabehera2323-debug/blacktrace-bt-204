@@ -1,0 +1,19 @@
+[Unit]
+Description=BlackTrace Maintenance Request Interface
+After=network.target
+
+[Service]
+Type=simple
+User=bt-operator
+Group=bt-operator
+WorkingDirectory=/opt/blacktrace/app
+ExecStart=/usr/bin/python3 /opt/blacktrace/app/request-interface.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
