@@ -94,7 +94,7 @@ chown -R root:root /opt/blacktrace/app
 chmod 0644 /opt/blacktrace/app/workflow/maintenance.conf
 
 # Initialize the protected root-proof object and challenge directories.
- /opt/blacktrace/challenge/setup-challenge-state.sh
+/opt/blacktrace/challenge/setup-challenge-state.sh
 
 cat > /etc/systemd/system/blacktrace-diagnostics.service <<'UNIT'
 [Unit]
